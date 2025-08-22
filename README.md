@@ -1,8 +1,2 @@
-/ (root)
- ├── index.html
- └── files/
-      ├── c.pdf
-      ├── cpp.pdf
-      ├── java.pdf
-      └── python.pdf
+
 
