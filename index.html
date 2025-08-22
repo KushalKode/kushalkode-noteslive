@@ -83,6 +83,7 @@
       background: #21262d;
       color: #e6edf3;
       transition: 0.2s;
+      cursor: pointer;
     }
     .note-actions a:hover {
       background: #58a6ff;
@@ -94,6 +95,37 @@
       margin-top: 2rem;
       border-top: 1px solid #21262d;
       color: #8b949e;
+    }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+    .modal-content {
+      background: #161b22;
+      padding: 1rem;
+      border-radius: 8px;
+      max-width: 90%;
+      max-height: 90%;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-content iframe {
+      flex: 1;
+      border: none;
+    }
+    .close {
+      align-self: flex-end;
+      font-size: 24px;
+      cursor: pointer;
+      margin-bottom: 0.5rem;
+      color: #e6edf3;
     }
   </style>
 </head>
@@ -114,16 +146,44 @@
     <p>© 2025 KushalKode | Handwritten Coding Notes</p>
   </footer>
 
+  <!-- Modal -->
+  <div id="pdfModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <iframe id="pdfFrame" src="" width="100%" height="600px"></iframe>
+    </div>
+  </div>
+
   <script>
     const notes = [
       { title: "C Language Notes", subject: "C", grade: "Beginner", size: "1.2 MB", url: "files/c.pdf" },
       { title: "C++ Notes", subject: "C++", grade: "Intermediate", size: "1.8 MB", url: "files/cpp.pdf" },
-      { title: "Java Notes", subject: "Java", grade: "Intermediate", size: "2.1 MB", url: "files/java.pdf" },
-      { title: "Python Notes", subject: "Python", grade: "Beginner", size: "2.5 MB", url: "files/python.pdf" }
+      { title: "Java Notes", subject: "Java", grade: "Intermediate", size: "2.1 MB", url: "files/Java_Complete_Notes_compressed.pdf" },
+      { title: "Python Notes", subject: "Python", grade: "Beginner", size: "2.5 MB", url: "files/Python_Complete_Notes_compressed.pdf" }
     ];
 
     const grid = document.getElementById("notesGrid");
     const searchInput = document.getElementById("searchInput");
+    const modal = document.getElementById("pdfModal");
+    const pdfFrame = document.getElementById("pdfFrame");
+    const closeModal = document.getElementById("closeModal");
+
+    function openPDF(url) {
+      pdfFrame.src = url;
+      modal.style.display = "flex";
+    }
+
+    closeModal.onclick = () => {
+      modal.style.display = "none";
+      pdfFrame.src = "";
+    };
+
+    window.onclick = (event) => {
+      if (event.target === modal) {
+        modal.style.display = "none";
+        pdfFrame.src = "";
+      }
+    };
 
     function renderNotes(filter = "") {
       grid.innerHTML = "";
@@ -140,7 +200,7 @@
               <p><strong>Size:</strong> ${note.size}</p>
             </div>
             <div class="note-actions">
-              <a href="${note.url}" target="_blank">Preview</a>
+              <a onclick="openPDF('${note.url}')">Preview</a>
               <a href="${note.url}" download>Download</a>
             </div>
           `;
@@ -154,3 +214,4 @@
   </script>
 </body>
 </html>
+
